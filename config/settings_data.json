@@ -16,6 +16,7 @@
         "type": "announcement-bar",
         "settings": {
           "text": "<p>Welcome to TrendifyShop! Free shipping on orders over $50</p>",
+          "background_color": "#2DD4BF",
           "link": "/collections/all",
           "link_text": "Shop Now"
         }
