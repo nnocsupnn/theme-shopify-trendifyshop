@@ -14,7 +14,7 @@
 
 <style>
 .announcement-bar {
-  background: var(--color-primary);
+  background: {{ section.settings.background_color | default: '#2DD4BF' }};
   color: white;
   text-align: center;
   padding: 8px 0;
@@ -57,6 +57,12 @@
       "id": "text",
       "default": "<p>Welcome to TrendifyShop! Free shipping on orders over $50</p>",
       "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "default": "#2DD4BF",
+      "label": "Background color"
     },
     {
       "type": "url",
