@@ -1,0 +1,321 @@
+{% comment %}
+  Search Results Template for TrendifyShop
+{% endcomment %}
+
+<div class="search-page section-padding">
+  <div class="page-width">
+    <header class="search-header">
+      <h1 class="search__title">
+        {% if search.performed %}
+          {{ 'general.search.heading' | t: count: search.results_count, terms: search.terms }}
+        {% else %}
+          {{ 'general.search.search' | t }}
+        {% endif %}
+      </h1>
+      
+      <form action="{{ routes.search_url }}" method="get" class="search-form">
+        <div class="search-form__input-wrapper">
+          <input type="search" 
+                 name="q" 
+                 value="{{ search.terms | escape }}"
+                 placeholder="{{ 'general.search.placeholder' | t }}"
+                 class="search-form__input"
+                 autocomplete="off">
+          <button type="submit" class="search-form__button btn btn--primary">
+            {{ 'general.search.submit' | t }}
+          </button>
+        </div>
+      </form>
+    </header>
+
+    {% if search.performed %}
+      {% if search.results.size == 0 %}
+        <div class="search-empty text-center">
+          <h2>{{ 'general.search.no_results' | t }}</h2>
+          <p>{{ 'general.search.no_results_html' | t: terms: search.terms }}</p>
+          <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">
+            {{ 'general.continue_shopping' | t }}
+          </a>
+        </div>
+      {% else %}
+        <div class="search-results">
+          <div class="search-filters">
+            <button type="button" class="search-filter active" data-filter="all">
+              {{ 'general.search.all_results' | t }} ({{ search.results.size }})
+            </button>
+            {% if search.results.products.size > 0 %}
+              <button type="button" class="search-filter" data-filter="products">
+                {{ 'general.search.products' | t }} ({{ search.results.products.size }})
+              </button>
+            {% endif %}
+            {% if search.results.articles.size > 0 %}
+              <button type="button" class="search-filter" data-filter="articles">
+                {{ 'general.search.articles' | t }} ({{ search.results.articles.size }})
+              </button>
+            {% endif %}
+          </div>
+
+          <div class="search-results-grid">
+            {% for item in search.results %}
+              {% case item.object_type %}
+                {% when 'product' %}
+                  <div class="search-result search-result--product" data-type="products">
+                    <div class="product-card card">
+                      <div class="product-card__media card__media">
+                        <a href="{{ item.url }}" class="product-card__link">
+                          {% if item.featured_media %}
+                            <img src="{{ item.featured_media | image_url: width: 300 }}" 
+                                 alt="{{ item.featured_media.alt | escape }}"
+                                 loading="lazy"
+                                 width="300"
+                                 height="{{ 300 | divided_by: item.featured_media.aspect_ratio }}">
+                          {% else %}
+                            <div class="product-card__placeholder">
+                              {% render 'icon-product' %}
+                            </div>
+                          {% endif %}
+                        </a>
+                      </div>
+                      
+                      <div class="product-card__content card__content">
+                        <h3 class="product-card__title card__heading">
+                          <a href="{{ item.url }}">{{ item.title }}</a>
+                        </h3>
+                        
+                        <div class="product-card__price price">
+                          <span class="price__current">{{ item.price | money }}</span>
+                          {% if item.compare_at_price > item.price %}
+                            <span class="price__compare price--compare">
+                              {{ item.compare_at_price | money }}
+                            </span>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+                {% when 'article' %}
+                  <div class="search-result search-result--article" data-type="articles">
+                    <article class="article-card card">
+                      {% if item.image %}
+                        <div class="article-card__media card__media">
+                          <a href="{{ item.url }}">
+                            <img src="{{ item.image | image_url: width: 300 }}" 
+                                 alt="{{ item.image.alt | default: item.title | escape }}"
+                                 loading="lazy"
+                                 width="300"
+                                 height="{{ 300 | divided_by: item.image.aspect_ratio }}">
+                          </a>
+                        </div>
+                      {% endif %}
+                      
+                      <div class="article-card__content card__content">
+                        <div class="article-card__meta">
+                          <span class="article-card__type">{{ 'blogs.article.article' | t }}</span>
+                          <time class="article-card__date">
+                            {{ item.published_at | date: format: 'abbreviated_date' }}
+                          </time>
+                        </div>
+                        
+                        <h3 class="article-card__title card__heading">
+                          <a href="{{ item.url }}">{{ item.title }}</a>
+                        </h3>
+                        
+                        {% if item.excerpt != blank %}
+                          <p class="article-card__excerpt">
+                            {{ item.excerpt | strip_html | truncatewords: 20 }}
+                          </p>
+                        {% endif %}
+                      </div>
+                    </article>
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+
+          {% paginate search.results by 24 %}
+            {% if paginate.parts.size > 1 %}
+              <div class="pagination-wrapper text-center mt-4">
+                <nav class="pagination">
+                  {% if paginate.previous %}
+                    <a href="{{ paginate.previous.url }}" class="pagination__item">
+                      ← {{ 'general.pagination.previous' | t }}
+                    </a>
+                  {% endif %}
+
+                  {% for part in paginate.parts %}
+                    {% if part.is_link %}
+                      <a href="{{ part.url }}" class="pagination__item">{{ part.title }}</a>
+                    {% else %}
+                      {% if part.title == paginate.current_page %}
+                        <span class="pagination__item pagination__item--current">{{ part.title }}</span>
+                      {% else %}
+                        <span class="pagination__item">{{ part.title }}</span>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if paginate.next %}
+                    <a href="{{ paginate.next.url }}" class="pagination__item">
+                      {{ 'general.pagination.next' | t }} →
+                    </a>
+                  {% endif %}
+                </nav>
+              </div>
+            {% endif %}
+          {% endpaginate %}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<style>
+.search-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.search__title {
+  margin-bottom: 2rem;
+}
+
+.search-form__input-wrapper {
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto;
+  gap: 0.5rem;
+}
+
+.search-form__input {
+  flex: 1;
+  padding: 16px;
+  border: var(--border-width) solid var(--color-base-outline-button);
+  border-radius: var(--border-radius);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.search-form__button {
+  white-space: nowrap;
+  padding: 16px 24px;
+}
+
+.search-empty {
+  padding: 4rem 0;
+}
+
+.search-filters {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.search-filter {
+  background: transparent;
+  border: var(--border-width) solid var(--color-base-outline-button);
+  border-radius: var(--border-radius);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: var(--animation-default);
+  font-family: inherit;
+}
+
+.search-filter.active,
+.search-filter:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.search-result {
+  transition: var(--animation-default);
+}
+
+.search-result.hidden {
+  display: none;
+}
+
+.article-card__meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--color-base-text-light);
+  margin-bottom: 1rem;
+}
+
+.article-card__type {
+  background: var(--color-secondary);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: var(--font-body-weight-bold);
+}
+
+.article-card__excerpt {
+  color: var(--color-base-text-light);
+  line-height: 1.6;
+}
+
+@media screen and (max-width: 767px) {
+  .search-form__input-wrapper {
+    flex-direction: column;
+  }
+  
+  .search-results-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .search-filters {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  
+  .search-filter {
+    flex-shrink: 0;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const filters = document.querySelectorAll('.search-filter');
+  const results = document.querySelectorAll('.search-result');
+  
+  filters.forEach(filter => {
+    filter.addEventListener('click', function() {
+      const filterType = this.dataset.filter;
+      
+      // Update active filter
+      filters.forEach(f => f.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Filter results
+      results.forEach(result => {
+        if (filterType === 'all') {
+          result.classList.remove('hidden');
+        } else {
+          if (result.dataset.type === filterType) {
+            result.classList.remove('hidden');
+          } else {
+            result.classList.add('hidden');
+          }
+        }
+      });
+    });
+  });
+});
+</script>

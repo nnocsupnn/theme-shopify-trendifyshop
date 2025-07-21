@@ -1,7 +1,9 @@
 {
   "general": {
     "404": {
-      "title": "Page not found"
+      "title": "404",
+      "subtext": "The page you're looking for can't be found.",
+      "link": "Back to Home"
     },
     "accessibility": {
       "refresh_page": "Refresh page",
@@ -14,10 +16,17 @@
     },
     "search": {
       "search": "Search",
+      "placeholder": "Search for products, articles and more...",
+      "submit": "Search",
       "heading": {
         "one": "{{ count }} result found for \"{{ terms }}\"",
         "other": "{{ count }} results found for \"{{ terms }}\""
-      }
+      },
+      "no_results": "No results found",
+      "no_results_html": "Sorry, no results found for \"{{ terms }}\". Try searching for something else.",
+      "all_results": "All Results",
+      "products": "Products",
+      "articles": "Articles"
     },
     "newsletter_form": {
       "email_placeholder": "Your email address",
@@ -83,6 +92,30 @@
   "templates": {
     "cart": {
       "cart": "Cart"
+    }
+  },
+  "blogs": {
+    "general": {
+      "no_articles": "No articles found"
+    },
+    "article": {
+      "by_author": "by {{ author }}",
+      "read_more": "Read More",
+      "back_to_blog": "Back to {{ title }}",
+      "tags": "Tagged",
+      "article": "Article"
+    },
+    "comments": {
+      "title": "Comments",
+      "comments_with_count": {
+        "one": "{{ count }} comment",
+        "other": "{{ count }} comments"
+      },
+      "leave_comment": "Leave a comment",
+      "name": "Name",
+      "email": "Email", 
+      "message": "Message",
+      "post": "Post Comment"
     }
   }
 }
