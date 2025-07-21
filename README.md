@@ -1,0 +1,1 @@
+# theme-shopify-trendifyshop
