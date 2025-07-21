@@ -1,0 +1,136 @@
+{{ 'section-newsletter-signup.css' | asset_url | stylesheet_tag }}
+
+<div class="newsletter-signup section-padding">
+  <div class="page-width">
+    <div class="newsletter-content text-center">
+      {% if section.settings.heading != blank %}
+        <h2 class="newsletter__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      
+      {% if section.settings.subheading != blank %}
+        <p class="newsletter__subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+      
+      {% form 'customer', class: 'newsletter-form' %}
+        {% if form.posted_successfully? %}
+          <div class="newsletter-form__success">
+            {{ 'general.newsletter_form.confirmation' | t }}
+          </div>
+        {% else %}
+          <div class="newsletter-form__fields">
+            <input type="email" 
+                   name="contact[email]" 
+                   placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                   class="newsletter-form__input"
+                   required>
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <button type="submit" class="btn btn--primary newsletter-form__button">
+              {{ 'general.newsletter_form.submit' | t }}
+            </button>
+          </div>
+        {% endif %}
+        
+        {% if form.errors %}
+          <div class="newsletter-form__error">
+            {{ form.errors.translated_fields['email'] | capitalize }}
+            {{ form.errors.messages['email'] }}
+          </div>
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+<style>
+.newsletter-signup {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: white;
+}
+
+.newsletter__heading {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.newsletter__subheading {
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.newsletter-form__fields {
+  display: flex;
+  max-width: 500px;
+  margin: 0 auto;
+  gap: 0.5rem;
+}
+
+.newsletter-form__input {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.newsletter-form__button {
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.newsletter-form__button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.newsletter-form__success {
+  color: white;
+  font-weight: var(--font-body-weight-bold);
+  font-size: 1.125rem;
+}
+
+.newsletter-form__error {
+  color: #FFE5E5;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+@media screen and (max-width: 767px) {
+  .newsletter-form__fields {
+    flex-direction: column;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Newsletter Signup",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Stay In The Loop",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "Subscribe to our newsletter and be the first to know about new products, sales, and trends!",
+      "label": "Subheading"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter Signup"
+    }
+  ]
+}
+{% endschema %}

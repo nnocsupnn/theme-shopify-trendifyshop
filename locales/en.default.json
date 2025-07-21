@@ -1,0 +1,88 @@
+{
+  "general": {
+    "404": {
+      "title": "Page not found"
+    },
+    "accessibility": {
+      "refresh_page": "Refresh page",
+      "selection_help": "Use the left and right arrow keys to navigate between menu tabs. Use the down arrow key to access the submenu.",
+      "unit_price_separator": "per"
+    },
+    "meta": {
+      "tags": "Tagged \"{{ tags }}\"",
+      "page": "Page {{ page }}"
+    },
+    "search": {
+      "search": "Search",
+      "heading": {
+        "one": "{{ count }} result found for \"{{ terms }}\"",
+        "other": "{{ count }} results found for \"{{ terms }}\""
+      }
+    },
+    "newsletter_form": {
+      "email_placeholder": "Your email address",
+      "submit": "Subscribe",
+      "confirmation": "Thanks for subscribing!"
+    },
+    "footer": {
+      "all_rights_reserved": "All rights reserved"
+    },
+    "continue_shopping": "Continue shopping",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
+  "sections": {
+    "header": {
+      "announcement": "Announcement",
+      "menu": "Menu"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "quantity": "Quantity"
+    },
+    "general": {
+      "sale": "Sale",
+      "sold_out": "Sold out",
+      "add_to_cart": "Add to cart"
+    }
+  },
+  "collections": {
+    "general": {
+      "view_all": "View all",
+      "items": "products",
+      "items_with_count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
+      },
+      "no_matches": "Sorry, there are no products in this collection",
+      "no_products_html": "Come back when we have more awesome products to show you."
+    },
+    "sorting": {
+      "title": "Sort by:",
+      "featured": "Featured",
+      "best_selling": "Best selling",
+      "az": "Alphabetically, A-Z",
+      "za": "Alphabetically, Z-A",
+      "price_ascending": "Price, low to high",
+      "price_descending": "Price, high to low",
+      "date_ascending": "Date, old to new",
+      "date_descending": "Date, new to old"
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "Account"
+    }
+  },
+  "templates": {
+    "cart": {
+      "cart": "Cart"
+    }
+  }
+}

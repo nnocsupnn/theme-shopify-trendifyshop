@@ -1,0 +1,256 @@
+{{ 'section-best-sellers.css' | asset_url | stylesheet_tag }}
+
+<div class="best-sellers section-padding">
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <div class="section-header text-center">
+        <h2 class="section-heading">{{ section.settings.heading }}</h2>
+        {% if section.settings.subheading != blank %}
+          <p class="section-subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% assign collection = collections[section.settings.collection] %}
+    {% assign products_to_show = section.settings.products_to_show | at_most: collection.products.size %}
+    
+    {% if collection.products.size > 0 %}
+      <div class="grid grid--4-col product-grid">
+        {% for product in collection.products limit: products_to_show %}
+          <div class="product-card card">
+            <div class="product-card__media card__media">
+              <a href="{{ product.url }}" class="product-card__link">
+                {% if product.featured_media %}
+                  <img src="{{ product.featured_media | image_url: width: 400 }}" 
+                       alt="{{ product.featured_media.alt | escape }}"
+                       loading="lazy"
+                       width="400"
+                       height="{{ 400 | divided_by: product.featured_media.aspect_ratio }}">
+                {% else %}
+                  <div class="product-card__placeholder">
+                    {% render 'icon-product' %}
+                  </div>
+                {% endif %}
+              </a>
+              
+              {% if product.compare_at_price > product.price %}
+                <div class="product-card__badge badge--sale">
+                  {{ 'products.general.sale' | t }}
+                </div>
+              {% endif %}
+              
+              {% unless product.available %}
+                <div class="product-card__badge badge--sold-out">
+                  {{ 'products.general.sold_out' | t }}
+                </div>
+              {% endunless %}
+            </div>
+            
+            <div class="product-card__content card__content">
+              <h3 class="product-card__title card__heading">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              </h3>
+              
+              <div class="product-card__price price">
+                <span class="price__current{% if product.compare_at_price > product.price %} price--on-sale{% endif %}">
+                  {{ product.price | money }}
+                </span>
+                {% if product.compare_at_price > product.price %}
+                  <span class="price__compare price--compare">
+                    {{ product.compare_at_price | money }}
+                  </span>
+                {% endif %}
+              </div>
+              
+              {% if section.settings.show_quick_add %}
+                <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="product-form">
+                  {% unless product.has_only_default_variant %}
+                    <div class="product-form__variants">
+                      <select name="id" class="product-form__variant-select">
+                        {% for variant in product.variants %}
+                          <option value="{{ variant.id }}" {% unless variant.available %}disabled{% endunless %}>
+                            {{ variant.title }}{% unless variant.available %} - {{ 'products.general.sold_out' | t }}{% endunless %}
+                          </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  {% else %}
+                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  {% endunless %}
+                  
+                  <button type="submit" 
+                          class="btn btn--primary btn--full-width"
+                          {% unless product.available %}disabled{% endunless %}
+                          data-add-to-cart>
+                    {% if product.available %}
+                      {{ 'products.general.add_to_cart' | t }}
+                    {% else %}
+                      {{ 'products.general.sold_out' | t }}
+                    {% endif %}
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      
+      {% if section.settings.show_view_all and collection.products.size > products_to_show %}
+        <div class="text-center mt-4">
+          <a href="{{ collection.url }}" class="btn btn--outline btn--large">
+            {{ 'collections.general.view_all' | t }}
+          </a>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<style>
+.best-sellers {
+  background-color: var(--color-base-background-alt);
+}
+
+.product-grid {
+  gap: 2rem;
+}
+
+.product-card {
+  position: relative;
+}
+
+.product-card__media {
+  position: relative;
+}
+
+.product-card__link {
+  display: block;
+}
+
+.product-card__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-base-background);
+  color: var(--color-base-text-light);
+  aspect-ratio: 1;
+}
+
+.product-card__placeholder svg {
+  width: 40px;
+  height: 40px;
+}
+
+.product-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 12px;
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  font-weight: var(--font-body-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+
+.badge--sale {
+  background: var(--color-accent);
+  color: white;
+}
+
+.badge--sold-out {
+  background: var(--color-base-text-light);
+  color: white;
+}
+
+.product-card__title a {
+  color: var(--color-base-accent);
+  text-decoration: none;
+  transition: var(--animation-default);
+}
+
+.product-card__title a:hover {
+  color: var(--color-primary);
+}
+
+.product-card__price {
+  margin-bottom: 1rem;
+}
+
+.product-form__variants {
+  margin-bottom: 1rem;
+}
+
+.product-form__variant-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: var(--border-width) solid var(--color-base-outline-button);
+  border-radius: var(--border-radius);
+  background: var(--color-base-background);
+  font-family: inherit;
+}
+
+.btn--full-width {
+  width: 100%;
+}
+
+@media screen and (max-width: 767px) {
+  .product-grid {
+    gap: 1rem;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Best Sellers",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Best Sellers",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "Shop our most popular trending products",
+      "label": "Subheading"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8,
+      "label": "Products to show"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "default": true,
+      "label": "Show quick add to cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "Show view all button"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Best Sellers"
+    }
+  ]
+}
+{% endschema %}
