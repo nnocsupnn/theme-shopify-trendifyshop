@@ -1,0 +1,37 @@
+{
+  "current": {
+    "color_primary": "#2DD4BF",
+    "color_secondary": "#3B82F6", 
+    "color_accent": "#F97316",
+    "color_base_text": "#1F2937",
+    "color_base_background": "#FFFFFF",
+    "color_base_background_alt": "#F9FAFB",
+    "logo_width": 200,
+    "page_width": "1200",
+    "show_vendor": false,
+    "show_rating": true,
+    "image_ratio": "adapt",
+    "sections": {
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {
+          "text": "<p>Welcome to TrendifyShop! Free shipping on orders over $50</p>",
+          "link": "/collections/all",
+          "link_text": "Shop Now"
+        }
+      },
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo_width": 200
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "show_social": true
+        }
+      }
+    }
+  }
+}

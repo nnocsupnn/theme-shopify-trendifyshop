@@ -1,0 +1,166 @@
+{{ 'section-hero-banner.css' | asset_url | stylesheet_tag }}
+
+<div class="hero-banner section-padding{% if section.settings.full_height %} hero-banner--full-height{% endif %}">
+  <div class="page-width">
+    <div class="hero-banner__content">
+      {% if section.settings.image != blank %}
+        <div class="hero-banner__media">
+          <img src="{{ section.settings.image | image_url: width: 1200 }}" 
+               alt="{{ section.settings.image.alt | escape }}"
+               loading="lazy"
+               width="1200"
+               height="{{ 1200 | divided_by: section.settings.image.aspect_ratio }}">
+        </div>
+      {% endif %}
+      
+      <div class="hero-banner__text">
+        {% if section.settings.heading != blank %}
+          <h1 class="hero-banner__heading">{{ section.settings.heading }}</h1>
+        {% endif %}
+        
+        {% if section.settings.subheading != blank %}
+          <p class="hero-banner__subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+        
+        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+          <a href="{{ section.settings.button_link }}" class="btn btn--primary btn--large">
+            {{ section.settings.button_label }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.hero-banner {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-banner--full-height {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero-banner__content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-banner__media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hero-banner__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-banner__media::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.hero-banner__heading {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: var(--font-body-weight-bold);
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+
+.hero-banner__subheading {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn--large {
+  padding: 16px 32px;
+  font-size: 1.125rem;
+  min-height: 55px;
+}
+
+@media screen and (max-width: 767px) {
+  .hero-banner--full-height {
+    min-height: 50vh;
+  }
+  
+  .hero-banner__heading {
+    margin-bottom: 0.75rem;
+  }
+  
+  .hero-banner__subheading {
+    margin-bottom: 1.5rem;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Discover What's Trending",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "default": "Shop the latest trends in fashion, gadgets, and lifestyle. Find your style at TrendifyShop.",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Shop Now",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_height",
+      "default": true,
+      "label": "Make section full height"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,203 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "TrendifyShop",
+    "theme_author": "TrendifyShop Team",
+    "theme_version": "1.0.0",
+    "theme_documentation_url": "https://trendifyshop.com/docs",
+    "theme_support_url": "https://trendifyshop.com/support"
+  },
+  {
+    "name": "Logo",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 50,
+        "max": 300,
+        "step": 10,
+        "default": 200,
+        "unit": "px",
+        "label": "Desktop logo width"
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Brand Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "default": "#2DD4BF",
+        "label": "Primary color (Teal)"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "default": "#3B82F6",
+        "label": "Secondary color (Blue)"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "default": "#F97316",
+        "label": "Accent color (Orange)"
+      },
+      {
+        "type": "header",
+        "content": "Base Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_base_text",
+        "default": "#1F2937",
+        "label": "Text color"
+      },
+      {
+        "type": "color",
+        "id": "color_base_background",
+        "default": "#FFFFFF",
+        "label": "Background color"
+      },
+      {
+        "type": "color",
+        "id": "color_base_background_alt",
+        "default": "#F9FAFB",
+        "label": "Alternative background color"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "default": "assistant_n4",
+        "label": "Heading font"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "assistant_n4",
+        "label": "Body font"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "select",
+        "id": "page_width",
+        "options": [
+          {
+            "value": "1200",
+            "label": "1200px"
+          },
+          {
+            "value": "1400",
+            "label": "1400px"
+          },
+          {
+            "value": "1600",
+            "label": "1600px"
+          }
+        ],
+        "default": "1200",
+        "label": "Page width"
+      }
+    ]
+  },
+  {
+    "name": "Product Cards",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "default": false,
+        "label": "Show product vendor"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_rating",
+        "default": true,
+        "label": "Show product rating"
+      },
+      {
+        "type": "select",
+        "id": "image_ratio",
+        "options": [
+          {
+            "value": "adapt",
+            "label": "Adapt to image"
+          },
+          {
+            "value": "portrait",
+            "label": "Portrait (2:3)"
+          },
+          {
+            "value": "square",
+            "label": "Square (1:1)"
+          }
+        ],
+        "default": "adapt",
+        "label": "Image ratio"
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social accounts"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook_url",
+        "label": "Facebook"
+      },
+      {
+        "type": "url",
+        "id": "social_instagram_url",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_twitter_url",
+        "label": "Twitter"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube_url",
+        "label": "YouTube"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok_url",
+        "label": "TikTok"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "32 x 32px .png required"
+      }
+    ]
+  }
+]

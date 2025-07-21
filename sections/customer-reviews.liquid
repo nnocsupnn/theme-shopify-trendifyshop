@@ -1,0 +1,301 @@
+{{ 'section-customer-reviews.css' | asset_url | stylesheet_tag }}
+
+<div class="customer-reviews section-padding">
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <div class="section-header text-center">
+        <h2 class="section-heading">{{ section.settings.heading }}</h2>
+        {% if section.settings.subheading != blank %}
+          <p class="section-subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="reviews-grid grid grid--3-col">
+        {% for block in section.blocks %}
+          <div class="review-card card" {{ block.shopify_attributes }}>
+            <div class="review-card__content card__content">
+              {% if block.settings.rating > 0 %}
+                <div class="review-card__rating">
+                  {% for i in (1..5) %}
+                    <span class="star{% if i <= block.settings.rating %} star--filled{% endif %}">
+                      {% render 'icon-star' %}
+                    </span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              
+              {% if block.settings.review_text != blank %}
+                <blockquote class="review-card__text">
+                  "{{ block.settings.review_text }}"
+                </blockquote>
+              {% endif %}
+              
+              <div class="review-card__author">
+                {% if block.settings.customer_image != blank %}
+                  <div class="review-card__avatar">
+                    <img src="{{ block.settings.customer_image | image_url: width: 60 }}"
+                         alt="{{ block.settings.customer_name | escape }}"
+                         loading="lazy"
+                         width="60"
+                         height="60">
+                  </div>
+                {% endif %}
+                
+                <div class="review-card__author-info">
+                  {% if block.settings.customer_name != blank %}
+                    <h4 class="review-card__name">{{ block.settings.customer_name }}</h4>
+                  {% endif %}
+                  {% if block.settings.customer_location != blank %}
+                    <p class="review-card__location">{{ block.settings.customer_location }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if section.settings.show_cta_button and section.settings.cta_text != blank %}
+      <div class="text-center mt-4">
+        <a href="{{ section.settings.cta_link | default: '#reviews' }}" class="btn btn--accent btn--large">
+          {{ section.settings.cta_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+.customer-reviews {
+  background: var(--color-base-background);
+}
+
+.reviews-grid {
+  gap: 2rem;
+}
+
+.review-card {
+  text-align: center;
+}
+
+.review-card__rating {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.star {
+  color: #E5E7EB;
+  transition: var(--animation-short);
+}
+
+.star--filled {
+  color: #FFC107;
+}
+
+.star svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.review-card__text {
+  font-style: italic;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+  color: var(--color-base-text);
+  position: relative;
+}
+
+.review-card__text::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+.review-card__author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.review-card__avatar {
+  flex-shrink: 0;
+}
+
+.review-card__avatar img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.review-card__author-info {
+  text-align: left;
+}
+
+.review-card__name {
+  font-size: 1rem;
+  font-weight: var(--font-body-weight-bold);
+  margin-bottom: 0.25rem;
+  color: var(--color-base-accent);
+}
+
+.review-card__location {
+  font-size: 0.875rem;
+  color: var(--color-base-text-light);
+  margin: 0;
+}
+
+@media screen and (max-width: 767px) {
+  .reviews-grid {
+    gap: 1.5rem;
+  }
+  
+  .review-card__text {
+    font-size: 1rem;
+  }
+  
+  .review-card__author {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .review-card__author-info {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 990px) {
+  .reviews-grid.grid--3-col {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Customer Reviews",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "What Our Customers Say",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "Don't just take our word for it - see what our happy customers have to say",
+      "label": "Subheading"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta_button",
+      "default": true,
+      "label": "Show call to action button"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "default": "Read More Reviews",
+      "label": "Call to action text"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Call to action link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Customer Review",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Star rating"
+        },
+        {
+          "type": "textarea",
+          "id": "review_text",
+          "label": "Review text"
+        },
+        {
+          "type": "text",
+          "id": "customer_name",
+          "label": "Customer name"
+        },
+        {
+          "type": "text",
+          "id": "customer_location",
+          "label": "Customer location"
+        },
+        {
+          "type": "image_picker",
+          "id": "customer_image",
+          "label": "Customer photo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer Reviews",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review_text": "Amazing quality and fast shipping! Will definitely order again.",
+            "customer_name": "Sarah M.",
+            "customer_location": "New York, NY"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review_text": "Love the trendy styles and excellent customer service.",
+            "customer_name": "Mike R.",
+            "customer_location": "Los Angeles, CA"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review_text": "Best shopping experience I've had online. Highly recommend!",
+            "customer_name": "Jessica L.",
+            "customer_location": "Chicago, IL"
+          }
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6
+}
+{% endschema %}

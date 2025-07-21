@@ -1,0 +1,193 @@
+{{ 'component-header.css' | asset_url | stylesheet_tag }}
+
+<header class="header" role="banner">
+  <div class="page-width">
+    <div class="header__inner">
+      <div class="header__logo-wrapper">
+        {% if section.settings.logo != blank %}
+          <a href="{{ routes.root_url }}" class="header__logo-link">
+            <img src="{{ section.settings.logo | image_url: width: 200 }}" 
+                 alt="{{ shop.name }}"
+                 class="header__logo-image"
+                 width="200"
+                 height="{{ 200 | divided_by: section.settings.logo.aspect_ratio }}">
+          </a>
+        {% else %}
+          <a href="{{ routes.root_url }}" class="header__logo">
+            TrendifyShop
+          </a>
+        {% endif %}
+      </div>
+
+      <nav class="header__nav" role="navigation">
+        {% for link in linklists.main-menu.links %}
+          <a href="{{ link.url }}" class="header__nav-link">{{ link.title }}</a>
+        {% endfor %}
+      </nav>
+
+      <div class="header__actions">
+        {% if shop.customer_accounts_enabled %}
+          <a href="{{ routes.account_url }}" class="header__account-link">
+            {% render 'icon-account' %}
+            <span class="visually-hidden">{{ 'customer.account.title' | t }}</span>
+          </a>
+        {% endif %}
+
+        <a href="{{ routes.search_url }}" class="header__search-link">
+          {% render 'icon-search' %}
+          <span class="visually-hidden">{{ 'general.search.search' | t }}</span>
+        </a>
+
+        <a href="{{ routes.cart_url }}" class="header__cart-link" data-cart-link>
+          {% render 'icon-cart' %}
+          <span class="cart-count" data-cart-count>{{ cart.item_count }}</span>
+          <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+        </a>
+
+        <button type="button" class="header__mobile-menu-button" data-mobile-menu-button aria-expanded="false">
+          {% render 'icon-hamburger' %}
+          <span class="visually-hidden">{{ 'sections.header.menu' | t }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="header__mobile-menu" data-mobile-menu>
+      <nav class="mobile-nav">
+        {% for link in linklists.main-menu.links %}
+          <a href="{{ link.url }}" class="mobile-nav__link">{{ link.title }}</a>
+        {% endfor %}
+      </nav>
+    </div>
+  </div>
+</header>
+
+<style>
+.header {
+  transition: all var(--animation-default);
+}
+
+.header--scrolled {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header__logo-image {
+  max-height: 40px;
+  width: auto;
+}
+
+.header__account-link,
+.header__search-link,
+.header__cart-link {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: var(--border-radius);
+  transition: var(--animation-default);
+}
+
+.header__account-link:hover,
+.header__search-link:hover,
+.header__cart-link:hover {
+  background-color: var(--color-base-background-alt);
+}
+
+.header__cart-link {
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--color-accent);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: var(--font-body-weight-bold);
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(25%, -25%);
+}
+
+.cart-count:empty {
+  display: none;
+}
+
+.header__mobile-menu-button {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.header__mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--color-base-background);
+  border-bottom: var(--border-width) solid rgba(var(--color-base-outline-button), var(--border-opacity));
+  z-index: 99;
+}
+
+.mobile-nav {
+  padding: 20px;
+}
+
+.mobile-nav__link {
+  display: block;
+  padding: 12px 0;
+  color: var(--color-base-text);
+  text-decoration: none;
+  border-bottom: var(--border-width) solid rgba(var(--color-base-outline-button), var(--border-opacity));
+}
+
+.mobile-nav__link:last-child {
+  border-bottom: none;
+}
+
+@media screen and (max-width: 767px) {
+  .header__nav {
+    display: none;
+  }
+  
+  .header__mobile-menu-button {
+    display: block;
+  }
+  
+  .header__mobile-menu.is-open {
+    display: block;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "default": 200,
+      "unit": "px",
+      "label": "Logo width"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,153 @@
+{% comment %}
+  Blog Page Template for TrendifyShop
+{% endcomment %}
+
+<div class="blog-page section-padding">
+  <div class="page-width">
+    <header class="blog-header text-center">
+      <h1 class="blog__title">{{ blog.title }}</h1>
+      {% if blog.summary != blank %}
+        <p class="blog__description">{{ blog.summary }}</p>
+      {% endif %}
+    </header>
+
+    {% if blog.articles.size > 0 %}
+      <div class="blog-articles">
+        <div class="article-grid grid grid--2-col">
+          {% for article in blog.articles %}
+            <article class="article-card card">
+              {% if article.image %}
+                <div class="article-card__media card__media">
+                  <a href="{{ article.url }}">
+                    <img src="{{ article.image | image_url: width: 600 }}" 
+                         alt="{{ article.image.alt | default: article.title | escape }}"
+                         loading="lazy"
+                         width="600"
+                         height="{{ 600 | divided_by: article.image.aspect_ratio }}">
+                  </a>
+                </div>
+              {% endif %}
+              
+              <div class="article-card__content card__content">
+                <div class="article-card__meta">
+                  <time class="article-card__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                    {{ article.published_at | date: format: 'abbreviated_date' }}
+                  </time>
+                  {% if article.author != blank %}
+                    <span class="article-card__author">{{ 'blogs.article.by_author' | t: author: article.author }}</span>
+                  {% endif %}
+                </div>
+                
+                <h2 class="article-card__title card__heading">
+                  <a href="{{ article.url }}">{{ article.title }}</a>
+                </h2>
+                
+                {% if article.excerpt != blank %}
+                  <p class="article-card__excerpt">{{ article.excerpt | strip_html | truncatewords: 25 }}</p>
+                {% endif %}
+                
+                <a href="{{ article.url }}" class="btn btn--outline">
+                  {{ 'blogs.article.read_more' | t }}
+                </a>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        {% paginate blog.articles by 6 %}
+          {% if paginate.parts.size > 1 %}
+            <div class="pagination-wrapper text-center mt-4">
+              <nav class="pagination" role="navigation" aria-label="Pagination">
+                {% if paginate.previous %}
+                  <a href="{{ paginate.previous.url }}" class="pagination__item pagination__item--prev">
+                    ← {{ 'general.pagination.previous' | t }}
+                  </a>
+                {% endif %}
+
+                {% for part in paginate.parts %}
+                  {% if part.is_link %}
+                    <a href="{{ part.url }}" class="pagination__item">{{ part.title }}</a>
+                  {% else %}
+                    {% if part.title == paginate.current_page %}
+                      <span class="pagination__item pagination__item--current">{{ part.title }}</span>
+                    {% else %}
+                      <span class="pagination__item">{{ part.title }}</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+
+                {% if paginate.next %}
+                  <a href="{{ paginate.next.url }}" class="pagination__item pagination__item--next">
+                    {{ 'general.pagination.next' | t }} →
+                  </a>
+                {% endif %}
+              </nav>
+            </div>
+          {% endif %}
+        {% endpaginate %}
+      </div>
+    {% else %}
+      <div class="blog-empty text-center">
+        <h2>{{ 'blogs.general.no_articles' | t }}</h2>
+        <a href="{{ routes.root_url }}" class="btn btn--primary">
+          {{ 'general.continue_shopping' | t }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+.blog-header {
+  margin-bottom: 3rem;
+}
+
+.blog__title {
+  margin-bottom: 1rem;
+}
+
+.blog__description {
+  font-size: 1.125rem;
+  color: var(--color-base-text-light);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.article-grid {
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.article-card__meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--color-base-text-light);
+  margin-bottom: 1rem;
+}
+
+.article-card__title a {
+  color: var(--color-base-accent);
+  text-decoration: none;
+}
+
+.article-card__title a:hover {
+  color: var(--color-primary);
+}
+
+.article-card__excerpt {
+  color: var(--color-base-text-light);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.blog-empty {
+  padding: 4rem 0;
+}
+
+@media screen and (max-width: 767px) {
+  .article-grid {
+    gap: 1.5rem;
+  }
+}
+</style>
